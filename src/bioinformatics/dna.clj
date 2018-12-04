@@ -1,4 +1,4 @@
-(ns bioinformatics.dna
+o(ns bioinformatics.dna
   (:refer-clojure :exclude [complement])
   (:require
    [clojure.set :as set]

@@ -1,13 +1,26 @@
-(ns bioinformatics.rna)
+(ns bioinformatics.rna
+  (:require
+   [clojure.set :as set]
+   [bioinformatics.base :as base]))
 
-(defn base->byte
-  [base]
-  (case base
-    :g (byte 71)
-    :a (byte 65)
-    :u (byte 85)
-    :c (byte 67)))
+(def base->byte
+  {:g (byte \G)
+   :a (byte \A)
+   :u (byte \U)
+   :c (byte \C)})
 
-(def from-dna (map #(if (= :t %) :u %)))
+(def byte->base (set/map-invert base->byte))
+
+(def from-dna (map #(case % :t :u %)))
+
+(def from-bytes
+  (comp
+   (take-while #(not= base/newline %))
+   (map byte->base)))
+
+(def from-string
+  (comp
+   (map byte)
+   from-bytes))
 
 (def to-bytes (map base->byte))
