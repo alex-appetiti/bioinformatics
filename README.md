@@ -15,3 +15,4 @@ Problem codes are as seen on http://rosalind.info/problems/list-view/ .
 - REVC
 - GC
 - HAMM
+- PROT
