@@ -5,6 +5,7 @@
    [clojure.java.io :as java.io]
    [bioinformatics.base :as base]
    [bioinformatics.fasta :as fasta]
+   [bioinformatics.fib :as fib]
    [bioinformatics.dna :as dna]
    [bioinformatics.io :as io]
    [bioinformatics.rna :as rna]))
@@ -21,6 +22,11 @@
       :rna
       (let [rna (eduction dna/from-bytes rna/from-dna in-stream)]
         (io/write-all rna/to-bytes rna))
+
+      :fib
+      (let [input (io/input-stream->string System/in)
+            [months litter] (map #(Integer/parseInt %) (str/split input #" "))]
+        (println (fib/rabbits months litter)))
 
       :revc
       (let [dna (eduction dna/from-bytes in-stream)]

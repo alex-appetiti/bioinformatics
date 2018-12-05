@@ -2,7 +2,8 @@
   (:require
    [clojure.java.io :as io])
   (:import
-   (java.io OutputStream PrintStream)))
+   (java.io OutputStream PrintStream InputStreamReader BufferedReader)
+   (java.util.stream Collectors)))
 
 (defn stream-from
   ([source] (stream-from source 1024))
@@ -22,3 +23,9 @@
   (let [f (xform #(.write System/out (byte %2)))]
     (reduce f nil coll)
     (.write System/out (int \newline))))
+
+(defn input-stream->string
+  [is]
+  (.. (BufferedReader. (InputStreamReader. is))
+      lines
+      (collect (Collectors/joining "\n"))))
