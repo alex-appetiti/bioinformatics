@@ -8,6 +8,7 @@
    [bioinformatics.fib :as fib]
    [bioinformatics.dna :as dna]
    [bioinformatics.io :as io]
+   [bioinformatics.protein :as protein]
    [bioinformatics.rna :as rna]))
 
 (defn -main
@@ -43,4 +44,8 @@
       (let [[line-1 [nl & line-2]] (split-with #(not= base/newline %) in-stream)
             dna1 (eduction dna/from-bytes line-1)
             dna2 (eduction dna/from-bytes line-2)]
-        (println (dna/hamming-distance dna1 dna2))))))
+        (println (dna/hamming-distance dna1 dna2)))
+
+      :prot
+      (let [protein (eduction rna/from-bytes protein/from-rna in-stream)]
+        (io/write-all protein/to-bytes protein)))))
