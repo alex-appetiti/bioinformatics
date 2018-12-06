@@ -2,7 +2,9 @@
   (:refer-clojure :exclude [complement])
   (:require
    [clojure.set :as set]
-   [bioinformatics.base :as base]))
+   [bioinformatics.base :as base])
+  (:import
+   (java.util LinkedList)))
 
 (def base->byte
   {::g (byte \G)
@@ -42,6 +44,16 @@
     (keep-indexed #(when (= needle %2) %1))))
   ([needle haystack]
    (into [] (positions-of needle) haystack)))
+
+; Revisit later.
+(defn restriction-sites
+  [^long min ^long max dna]
+  (let [sizes (range min (inc max))
+        size->snippets (zipmap sizes (map #(partition % 1 dna) sizes))]
+    (for [[size snippets] size->snippets
+          [ix snippet] (map-indexed vector snippets)
+          :when (= snippet (reverse-complement snippet))]
+      [ix size])))
 
 (def from-bytes
   (comp

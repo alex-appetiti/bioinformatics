@@ -15,15 +15,25 @@
   (into {} (map (fn [[k v]] [k (f v)])) m))
 
 (defn sliding-window
-  [^long n]
-  (fn [rf]
-    (let [window (LinkedList.)]
-      (fn
-        ([] (rf))
-        ([result] (rf result))
-        ([result input]
-         (.addLast window input)
-         (when (> (.size window) n) (.remove window))
-         (if (= n (.size window))
-           (rf result (vec (.toArray window)))
-           result))))))
+  ([^long n] (sliding-window n :full))
+  ([^long n full-or-all]
+   (fn [rf]
+     (let [window (LinkedList.)]
+       (fn
+         ([] (rf))
+         ([result]
+          (case full-or-all
+            :full (rf result)
+            :all
+            (loop [result result]
+              (if (.isEmpty window)
+                (rf result)
+                (do
+                  (.remove window)
+                  (recur (rf result (vec (.toArray window)))))))))
+         ([result input]
+          (.addLast window input)
+          (when (> (.size window) n) (.remove window))
+          (if (= n (.size window))
+            (rf result (vec (.toArray window)))
+            result)))))))

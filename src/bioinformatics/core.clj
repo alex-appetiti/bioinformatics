@@ -74,4 +74,10 @@
 
       :prtm
       (let [protein (eduction protein/from-bytes in-stream)]
-        (println (double (protein/mass protein)))))))
+        (println (double (protein/mass protein))))
+
+      :revp
+      (let [dna (val (first (into {} fasta/from-bytes in-stream)))
+            results (->> (dna/restriction-sites 4 12 dna)
+                         (map (fn [[ix l]] [(inc ix) l])))]
+        (run! #(apply println %) results)))))
