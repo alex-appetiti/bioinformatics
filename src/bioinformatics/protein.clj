@@ -1,6 +1,8 @@
 (ns bioinformatics.protein
   (:require
+   [clojure.set :as set]
    [clojure.string :as str]
+   [bioinformatics.base :as base]
    [bioinformatics.rna :as rna]))
 
 (def codon->amino-acid
@@ -69,6 +71,17 @@
    [::rna/g ::rna/g ::rna/a] ::g
    [::rna/g ::rna/g ::rna/g] ::g})
 
+(def amino-acid->count
+  (->> (group-by val codon->amino-acid)
+       (base/vmap count)))
+
+(defn mrna-count
+  [protein]
+  (transduce
+   (map amino-acid->count)
+   base/mod-mult
+   protein))
+
 (def amino-acid->byte
   {::f (byte \F)
    ::l (byte \L)
@@ -91,10 +104,18 @@
    ::e (byte \E)
    ::g (byte \G)})
 
+(def byte->amino-acid (set/map-invert amino-acid->byte))
+
 (def from-rna
   (comp
    (partition-all 3)
-   (map codon->amino-acid)
-   (take-while #(not= ::stop %))))
+   (map codon->amino-acid)))
 
-(def to-bytes (map amino-acid->byte))
+(def to-bytes
+  (comp
+   (take-while #(not= ::stop %))
+   (map amino-acid->byte)))
+
+(def from-bytes
+  (fn [rf]
+    (completing ((keep byte->amino-acid) rf) #(rf %1 ::stop))))

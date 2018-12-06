@@ -59,4 +59,8 @@
             haystack (eduction dna/from-bytes line-1)
             needle (sequence dna/from-bytes line-2)
             positions (dna/positions-of needle haystack)]
-        (apply println (map inc positions))))))
+        (apply println (map inc positions)))
+
+      :mrna
+      (let [protein (eduction protein/from-bytes in-stream)]
+        (println (protein/mrna-count protein))))))

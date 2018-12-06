@@ -1,5 +1,5 @@
 # bioinformatics
-Rosalind.info problems
+Clojure solutions to Rosalind.info problems
 
 To run:
 ```bash
