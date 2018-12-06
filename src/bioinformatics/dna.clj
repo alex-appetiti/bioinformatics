@@ -5,18 +5,18 @@
    [bioinformatics.base :as base]))
 
 (def base->byte
-  {:g (byte \G)
-   :a (byte \A)
-   :t (byte \T)
-   :c (byte \C)})
+  {::g (byte \G)
+   ::a (byte \A)
+   ::t (byte \T)
+   ::c (byte \C)})
 
 (def byte->base (set/map-invert base->byte))
 
 (def complement
-  {:g :c
-   :a :t
-   :t :a
-   :c :g})
+  {::g ::c
+   ::a ::t
+   ::t ::a
+   ::c ::g})
 
 (defn reverse-complement
   [dna]
@@ -24,7 +24,7 @@
 
 (defn gc-content
   [dna]
-  (let [{:keys [g c]} (frequencies dna)
+  (let [{:keys [::g ::c] :or {g 0 c 0}} (frequencies dna)
         length (count dna)]
     (/ (+ g c) length)))
 

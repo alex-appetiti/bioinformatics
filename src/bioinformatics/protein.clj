@@ -1,99 +1,100 @@
 (ns bioinformatics.protein
   (:require
-   [clojure.string :as str]))
+   [clojure.string :as str]
+   [bioinformatics.rna :as rna]))
 
 (def codon->amino-acid
-  {[:u :u :u] :f
-   [:u :u :c] :f
-   [:u :u :a] :l
-   [:u :u :g] :l
-   [:u :c :u] :s
-   [:u :c :c] :s
-   [:u :c :a] :s
-   [:u :c :g] :s
-   [:u :a :u] :y
-   [:u :a :c] :y
-   [:u :a :a] :stop
-   [:u :a :g] :stop
-   [:u :g :u] :c
-   [:u :g :c] :c
-   [:u :g :a] :stop
-   [:u :g :g] :w
-   [:c :u :u] :l
-   [:c :u :c] :l
-   [:c :u :a] :l
-   [:c :u :g] :l
-   [:c :c :u] :p
-   [:c :c :c] :p
-   [:c :c :a] :p
-   [:c :c :g] :p
-   [:c :a :u] :h
-   [:c :a :c] :h
-   [:c :a :a] :q
-   [:c :a :g] :q
-   [:c :g :u] :r
-   [:c :g :c] :r
-   [:c :g :a] :r
-   [:c :g :g] :r
-   [:a :u :u] :i
-   [:a :u :c] :i
-   [:a :u :a] :i
-   [:a :u :g] :m
-   [:a :c :u] :t
-   [:a :c :c] :t
-   [:a :c :a] :t
-   [:a :c :g] :t
-   [:a :a :u] :n
-   [:a :a :c] :n
-   [:a :a :a] :k
-   [:a :a :g] :k
-   [:a :g :u] :s
-   [:a :g :c] :s
-   [:a :g :a] :r
-   [:a :g :g] :r
-   [:g :u :u] :v
-   [:g :u :c] :v
-   [:g :u :a] :v
-   [:g :u :g] :v
-   [:g :c :u] :a
-   [:g :c :c] :a
-   [:g :c :a] :a
-   [:g :c :g] :a
-   [:g :a :u] :d
-   [:g :a :c] :d
-   [:g :a :a] :e
-   [:g :a :g] :e
-   [:g :g :u] :g
-   [:g :g :c] :g
-   [:g :g :a] :g
-   [:g :g :g] :g})
+  {[:rna/u :rna/u :rna/u] ::f
+   [:rna/u :rna/u :rna/c] ::f
+   [:rna/u :rna/u :rna/a] ::l
+   [:rna/u :rna/u :rna/g] ::l
+   [:rna/u :rna/c :rna/u] ::s
+   [:rna/u :rna/c :rna/c] ::s
+   [:rna/u :rna/c :rna/a] ::s
+   [:rna/u :rna/c :rna/g] ::s
+   [:rna/u :rna/a :rna/u] ::y
+   [:rna/u :rna/a :rna/c] ::y
+   [:rna/u :rna/a :rna/a] ::stop
+   [:rna/u :rna/a :rna/g] ::stop
+   [:rna/u :rna/g :rna/u] ::c
+   [:rna/u :rna/g :rna/c] ::c
+   [:rna/u :rna/g :rna/a] ::stop
+   [:rna/u :rna/g :rna/g] ::w
+   [:rna/c :rna/u :rna/u] ::l
+   [:rna/c :rna/u :rna/c] ::l
+   [:rna/c :rna/u :rna/a] ::l
+   [:rna/c :rna/u :rna/g] ::l
+   [:rna/c :rna/c :rna/u] ::p
+   [:rna/c :rna/c :rna/c] ::p
+   [:rna/c :rna/c :rna/a] ::p
+   [:rna/c :rna/c :rna/g] ::p
+   [:rna/c :rna/a :rna/u] ::h
+   [:rna/c :rna/a :rna/c] ::h
+   [:rna/c :rna/a :rna/a] ::q
+   [:rna/c :rna/a :rna/g] ::q
+   [:rna/c :rna/g :rna/u] ::r
+   [:rna/c :rna/g :rna/c] ::r
+   [:rna/c :rna/g :rna/a] ::r
+   [:rna/c :rna/g :rna/g] ::r
+   [:rna/a :rna/u :rna/u] ::i
+   [:rna/a :rna/u :rna/c] ::i
+   [:rna/a :rna/u :rna/a] ::i
+   [:rna/a :rna/u :rna/g] ::m
+   [:rna/a :rna/c :rna/u] ::t
+   [:rna/a :rna/c :rna/c] ::t
+   [:rna/a :rna/c :rna/a] ::t
+   [:rna/a :rna/c :rna/g] ::t
+   [:rna/a :rna/a :rna/u] ::n
+   [:rna/a :rna/a :rna/c] ::n
+   [:rna/a :rna/a :rna/a] ::k
+   [:rna/a :rna/a :rna/g] ::k
+   [:rna/a :rna/g :rna/u] ::s
+   [:rna/a :rna/g :rna/c] ::s
+   [:rna/a :rna/g :rna/a] ::r
+   [:rna/a :rna/g :rna/g] ::r
+   [:rna/g :rna/u :rna/u] ::v
+   [:rna/g :rna/u :rna/c] ::v
+   [:rna/g :rna/u :rna/a] ::v
+   [:rna/g :rna/u :rna/g] ::v
+   [:rna/g :rna/c :rna/u] ::a
+   [:rna/g :rna/c :rna/c] ::a
+   [:rna/g :rna/c :rna/a] ::a
+   [:rna/g :rna/c :rna/g] ::a
+   [:rna/g :rna/a :rna/u] ::d
+   [:rna/g :rna/a :rna/c] ::d
+   [:rna/g :rna/a :rna/a] ::e
+   [:rna/g :rna/a :rna/g] ::e
+   [:rna/g :rna/g :rna/u] ::g
+   [:rna/g :rna/g :rna/c] ::g
+   [:rna/g :rna/g :rna/a] ::g
+   [:rna/g :rna/g :rna/g] ::g})
 
 (def amino-acid->byte
-  {:f (byte \F)
-   :l (byte \L)
-   :s (byte \S)
-   :y (byte \Y)
-   :c (byte \C)
-   :w (byte \W)
-   :p (byte \P)
-   :h (byte \H)
-   :q (byte \Q)
-   :r (byte \R)
-   :i (byte \I)
-   :m (byte \M)
-   :t (byte \T)
-   :n (byte \N)
-   :k (byte \K)
-   :v (byte \V)
-   :a (byte \A)
-   :d (byte \D)
-   :e (byte \E)
-   :g (byte \G)})
+  {::f (byte \F)
+   ::l (byte \L)
+   ::s (byte \S)
+   ::y (byte \Y)
+   ::c (byte \C)
+   ::w (byte \W)
+   ::p (byte \P)
+   ::h (byte \H)
+   ::q (byte \Q)
+   ::r (byte \R)
+   ::i (byte \I)
+   ::m (byte \M)
+   ::t (byte \T)
+   ::n (byte \N)
+   ::k (byte \K)
+   ::v (byte \V)
+   ::a (byte \A)
+   ::d (byte \D)
+   ::e (byte \E)
+   ::g (byte \G)})
 
 (def from-rna
   (comp
    (partition-all 3)
    (map codon->amino-acid)
-   (take-while #(not= :stop %))))
+   (take-while #(not= ::stop %))))
 
 (def to-bytes (map amino-acid->byte))
