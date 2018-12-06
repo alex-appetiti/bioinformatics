@@ -16,3 +16,4 @@ Problem codes are as seen on http://rosalind.info/problems/list-view/ .
 - GC
 - HAMM
 - PROT
+- SUBS
