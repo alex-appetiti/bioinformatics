@@ -1,8 +1,8 @@
 (ns bioinformatics.core
   (:require
+   [clojure.math.combinatorics :as combinatorics]
    [clojure.set :as set]
    [clojure.string :as str]
-   [clojure.java.io :as java.io]
    [bioinformatics.base :as base]
    [bioinformatics.fasta :as fasta]
    [bioinformatics.fib :as fib]
@@ -63,4 +63,11 @@
 
       :mrna
       (let [protein (eduction protein/from-bytes in-stream)]
-        (println (protein/mrna-count protein))))))
+        (println (protein/mrna-count protein)))
+
+      :perm
+      (let [scanner (Scanner. System/in)
+            length (.nextInt scanner)
+            permutations (combinatorics/permutations (range 1 (inc length)))]
+        (println (count permutations))
+        (run! #(apply println %) permutations)))))
