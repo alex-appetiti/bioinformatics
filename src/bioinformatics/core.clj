@@ -19,7 +19,8 @@
     (case (keyword challenge)
       :dna
       (let [base->count (frequencies (eduction dna/from-bytes in-stream))
-            counts (map base->count [:dna/a :dna/c :dna/g :dna/t])]
+            _ (println base->count)
+            counts (map base->count [::dna/a ::dna/c ::dna/g ::dna/t])]
         (apply println counts))
 
       :rna

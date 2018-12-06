@@ -11,10 +11,10 @@
    ::c (byte \C)})
 
 (def dna->rna
-  {:dna/g ::g
-   :dna/a ::a
-   :dna/t ::u
-   :dna/c ::c})
+  {::dna/g ::g
+   ::dna/a ::a
+   ::dna/t ::u
+   ::dna/c ::c})
 
 (def byte->base (set/map-invert base->byte))
 
