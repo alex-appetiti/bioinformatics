@@ -17,3 +17,5 @@ Problem codes are as seen on http://rosalind.info/problems/list-view/ .
 - HAMM
 - PROT
 - SUBS
+- MRNA
+- PERM
