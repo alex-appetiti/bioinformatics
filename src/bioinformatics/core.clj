@@ -70,4 +70,8 @@
             length (.nextInt scanner)
             permutations (combinatorics/permutations (range 1 (inc length)))]
         (println (count permutations))
-        (run! #(apply println %) permutations)))))
+        (run! #(apply println %) permutations))
+
+      :prtm
+      (let [protein (eduction protein/from-bytes in-stream)]
+        (println (double (protein/mass protein)))))))

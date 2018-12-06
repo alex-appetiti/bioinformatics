@@ -5,6 +5,31 @@
    [bioinformatics.base :as base]
    [bioinformatics.rna :as rna]))
 
+(def amino-acid->mass
+  (base/vmap
+   rationalize
+   {::a 71.03711
+    ::c 103.00919
+    ::d 115.02694
+    ::e 129.04259
+    ::f 147.06841
+    ::g 57.02146
+    ::h 137.05891
+    ::i 113.08406
+    ::k 128.09496
+    ::l 113.08406
+    ::m 131.04049
+    ::n 114.04293
+    ::p 97.05276
+    ::q 128.05858
+    ::r 156.10111
+    ::s 87.03203
+    ::t 101.04768
+    ::v 99.06841
+    ::w 186.07931
+    ::y 163.06333
+    ::stop 0}))
+
 (def codon->amino-acid
   {[::rna/u ::rna/u ::rna/u] ::f
    [::rna/u ::rna/u ::rna/c] ::f
@@ -80,6 +105,13 @@
   (transduce
    (map amino-acid->count)
    base/mod-mult
+   protein))
+
+(defn mass
+  [protein]
+  (transduce
+   (map amino-acid->mass)
+   +
    protein))
 
 (def amino-acid->byte
