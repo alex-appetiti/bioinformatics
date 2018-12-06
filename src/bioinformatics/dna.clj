@@ -35,6 +35,14 @@
    +
    (map vector dna-1 dna-2)))
 
+(defn positions-of
+  ([needle]
+   (comp
+    (base/sliding-window (count needle))
+    (keep-indexed #(when (= needle %2) %1))))
+  ([needle haystack]
+   (into [] (positions-of needle) haystack)))
+
 (def from-bytes
   (comp
    (take-while #(not= base/newline %))

@@ -9,7 +9,9 @@
    [bioinformatics.dna :as dna]
    [bioinformatics.io :as io]
    [bioinformatics.protein :as protein]
-   [bioinformatics.rna :as rna]))
+   [bioinformatics.rna :as rna])
+  (:import
+   (java.util Scanner)))
 
 (defn -main
   [challenge]
@@ -18,15 +20,16 @@
       :dna
       (let [base->count (frequencies (eduction dna/from-bytes in-stream))
             counts (map base->count [:a :c :g :t])]
-        (println (str/join " " counts)))
+        (apply println counts))
 
       :rna
       (let [rna (eduction dna/from-bytes rna/from-dna in-stream)]
         (io/write-all rna/to-bytes rna))
 
       :fib
-      (let [input (io/input-stream->string System/in)
-            [months litter] (map #(Integer/parseInt %) (str/split input #" "))]
+      (let [scanner (Scanner. System/in)
+            months (.nextInt scanner)
+            litter (.nextInt scanner)]
         (println (fib/rabbits months litter)))
 
       :revc
@@ -48,4 +51,11 @@
 
       :prot
       (let [protein (eduction rna/from-bytes protein/from-rna in-stream)]
-        (io/write-all protein/to-bytes protein)))))
+        (io/write-all protein/to-bytes protein))
+
+      :subs
+      (let [[line-1 [nl & line-2]] (split-with #(not= base/newline %) in-stream)
+            haystack (eduction dna/from-bytes line-1)
+            needle (sequence dna/from-bytes line-2)
+            positions (dna/positions-of needle haystack)]
+        (apply println (map inc positions))))))
