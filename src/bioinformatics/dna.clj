@@ -48,12 +48,11 @@
 ; Revisit later.
 (defn restriction-sites
   [^long min ^long max dna]
-  (let [sizes (range min (inc max))
-        size->snippets (zipmap sizes (map #(partition % 1 dna) sizes))]
-    (for [[size snippets] size->snippets
-          [ix snippet] (map-indexed vector snippets)
-          :when (= snippet (reverse-complement snippet))]
-      [ix size])))
+  (for [size (range min (inc max))
+        :let [snippets (partition size 1 dna)]
+        [ix snippet] (map-indexed vector snippets)
+        :when (= snippet (reverse-complement snippet))]
+    [ix size]))
 
 (def from-bytes
   (comp
