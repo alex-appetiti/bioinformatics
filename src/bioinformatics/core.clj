@@ -19,7 +19,6 @@
     (case (keyword challenge)
       :dna
       (let [base->count (frequencies (eduction dna/from-bytes in-stream))
-            _ (println base->count)
             counts (map base->count [::dna/a ::dna/c ::dna/g ::dna/t])]
         (apply println counts))
 
@@ -80,4 +79,10 @@
       (let [dna (val (first (into {} fasta/from-bytes in-stream)))
             results (->> (dna/restriction-sites 4 12 dna)
                          (map (fn [[ix l]] [(inc ix) l])))]
-        (run! #(apply println %) results)))))
+        (run! #(apply println %) results))
+
+      :pperm
+      (let [scanner (Scanner. System/in)
+            n (.nextInt scanner)
+            k (.nextInt scanner)]
+        (println (reduce base/mod-mult (range n (- n k) -1)))))))

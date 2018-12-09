@@ -8,7 +8,7 @@
 (defn mod-mult
   ([] 1)
   ([^long n] (mod n 1000000))
-  ([^long n ^long m] (* (mod n 1000000) m)))
+  ([^long n ^long m] (mod (* n m) 1000000)))
 
 (defn vmap
   [f m]
