@@ -81,8 +81,40 @@
                          (map (fn [[ix l]] [(inc ix) l])))]
         (run! #(apply println %) results))
 
-      :pperm
+      :pper
       (let [scanner (Scanner. System/in)
             n (.nextInt scanner)
             k (.nextInt scanner)]
-        (println (reduce base/mod-mult (range n (- n k) -1)))))))
+        (println (reduce base/mod-mult (range n (- n k) -1))))
+
+      :sign
+      (let [scanner (Scanner. System/in)
+            size (.nextInt scanner)
+            entries (for [permutation (combinatorics/permutations
+                                       (range 1 (inc size)))
+                          signs (combinatorics/selections [-1 1] size)]
+                      (map * signs permutation))]
+        (println (count entries))
+        (run! #(apply println %) entries))
+
+      :iprb
+      (let [scanner (Scanner. System/in)
+            dominant (.nextInt scanner)
+            neutral (.nextInt scanner)
+            recessive (.nextInt scanner)
+            population (+ dominant neutral recessive)
+            total (* 4 (combinatorics/count-combinations (range population) 2))
+            dom-dom (combinatorics/count-combinations (range dominant) 2)
+            neu-neu (combinatorics/count-combinations (range neutral) 2)
+            dom-neu (* dominant neutral)
+            dom-rec (* dominant recessive)
+            neu-rec (* neutral recessive)]
+        (->
+         (/ (+ (* 4 dom-dom)
+               (* 4 dom-neu)
+               (* 4 dom-rec)
+               (* 3 neu-neu)
+               (* 2 neu-rec))
+            total)
+         double
+         println)))))
