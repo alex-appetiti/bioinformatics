@@ -14,6 +14,10 @@
   [f m]
   (into {} (map (fn [[k v]] [k (f v)])) m))
 
+(defn kmap
+  [f m]
+  (into {} (map (fn [[k v]] [(f k) v])) m))
+
 (defn sliding-window
   ([^long n] (sliding-window n :full))
   ([^long n full-or-all]

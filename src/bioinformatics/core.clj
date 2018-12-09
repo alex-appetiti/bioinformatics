@@ -117,4 +117,9 @@
                (* 2 neu-rec))
             total)
          double
-         println)))))
+         println))
+
+      :grph
+      (let [name->dna (into {} fasta/from-bytes in-stream)
+            edges (fasta/edges 3 name->dna)]
+        (run! #(apply println %) edges)))))
