@@ -27,9 +27,9 @@
                    #(update %1 (take-last suffix-len %2) (fnil into []) %3)
                    {}
                    dna->names)]
-    (for [out (keys out->names)
-          in-name (in->names out)
-          out-name (out->names out)
+    (for [suffix (keys out->names)
+          in-name (in->names suffix)
+          out-name (out->names suffix)
           :when (not= in-name out-name)]
       [in-name out-name])))
 

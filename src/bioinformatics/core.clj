@@ -4,9 +4,9 @@
    [clojure.set :as set]
    [clojure.string :as str]
    [bioinformatics.base :as base]
+   [bioinformatics.dna :as dna]
    [bioinformatics.fasta :as fasta]
    [bioinformatics.fib :as fib]
-   [bioinformatics.dna :as dna]
    [bioinformatics.io :as io]
    [bioinformatics.protein :as protein]
    [bioinformatics.rna :as rna])
